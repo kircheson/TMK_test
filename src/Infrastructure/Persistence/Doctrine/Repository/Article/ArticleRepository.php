@@ -26,7 +26,12 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     public function findActiveArticles(): array
     {
-        // TODO: Implement findActiveArticles() method.
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.active = :active')
+            ->setParameter('active', true)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findBySlug(string $slug): Article
