@@ -15,9 +15,6 @@ RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql && docker-php-ext-config
 # Install PHP extensions
 RUN docker-php-ext-install -j$(nproc) pdo_mysql intl zip opcache
 
-# Создайте файл конфигурации для установки лимита памяти
-RUN echo 'memory_limit = 4096M' >> /usr/local/etc/php/conf.d/docker-php-memory-limit.ini
-
 # Create PHP configuration
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 

@@ -5,29 +5,35 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository\Article;
 
 use App\Domain\Entity\Article\Article;
-use App\Domain\Entity\User\User;
 use App\Domain\Repository\Article\ArticleRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use DomainException;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ArticleRepository implements ArticleRepositoryInterface
+class ArticleRepository extends ServiceEntityRepository implements ArticleRepositoryInterface
 {
-    private ObjectRepository $repository;
+    /*    private ObjectRepository $repository;
 
-    private EntityManagerInterface $em;
+        private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $em)
+        public function __construct(EntityManagerInterface $em)
+        {
+            $this->em = $em;
+            $this->repository = $em->getRepository(User::class);
+        }
+    В данном куске кода из UserRepository, а конкретно в строке "$em->getRepository(User::class);"
+    происходит утечка памяти. Я решил это расширением от класса ServiceEntityRepository, стандартное
+    решение, иначе никакой оперативной памяти не хватает (при тестах не хватило даже 40GB)
+    */
+
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->em = $em;
-        $this->repository = $em->getRepository(Article::class);
+        parent::__construct($registry, Article::class);
     }
 
-    public function createQueryBuilder($alias = null): QueryBuilder
+    public function createQueryBuilder($alias = null, string|null $indexBy = null): QueryBuilder
     {
-        return $this->em->createQueryBuilder()
+        return $this->getEntityManager()->createQueryBuilder()
             ->select($alias)
             ->from(Article::class, $alias);
     }
