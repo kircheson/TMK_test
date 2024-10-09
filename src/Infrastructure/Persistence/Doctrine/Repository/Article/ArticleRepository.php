@@ -9,6 +9,7 @@ use App\Domain\Entity\User\User;
 use App\Domain\Repository\Article\ArticleRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Doctrine\ORM\QueryBuilder;
 use DomainException;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
@@ -21,7 +22,14 @@ class ArticleRepository implements ArticleRepositoryInterface
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->repository = $em->getRepository(User::class);
+        $this->repository = $em->getRepository(Article::class);
+    }
+
+    public function createQueryBuilder($alias = null): QueryBuilder
+    {
+        return $this->em->createQueryBuilder()
+            ->select($alias)
+            ->from(Article::class, $alias);
     }
 
     public function findActiveArticles(): array
