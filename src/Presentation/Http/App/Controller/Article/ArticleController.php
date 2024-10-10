@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presentation\Http\App\Controller\Article;
 
 use App\Infrastructure\Persistence\Doctrine\Repository\Article\ArticleRepository;
@@ -12,10 +14,8 @@ class ArticleController extends AbstractController
     #[Route('/articles', name: 'article_list')]
     public function list(ArticleRepository $articleRepository): Response
     {
-        exit;
         $articles = $articleRepository->findActiveArticles();
-        exit;
-        return $this->render('article/list.html.twig', [
+        return $this->render('app/page/article/list.html.twig', [
             'articles' => $articles,
         ]);
     }
