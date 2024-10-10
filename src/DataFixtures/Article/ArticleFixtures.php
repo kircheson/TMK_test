@@ -15,7 +15,7 @@ class ArticleFixtures extends Fixture
                 'title' => 'Первая статья',
                 'slug' => 'pervaya-statiya',
                 'active' => true,
-                'views' => 0,
+                'views' => 50000,
                 'description' => 'Описание первой статьи',
             ],
             [
