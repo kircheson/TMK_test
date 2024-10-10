@@ -1,0 +1,7 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+    <h1>{{ article.title }}</h1>
+    <p>{{ article.description }}</p>
+    <p>Просмотры: {{ formatViews(article.views) }}</p>
+{% endblock %}

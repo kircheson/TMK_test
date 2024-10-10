@@ -19,4 +19,18 @@ class ArticleController extends AbstractController
             'articles' => $articles,
         ]);
     }
+
+    #[Route('/articles/{slug}', name: 'article_show')]
+    public function show(string $slug, ArticleRepository $articleRepository): Response
+    {
+        $article = $articleRepository->findOneBy(['slug' => $slug]);
+
+        if (!$article || !$article->isActive()) {
+            throw $this->createNotFoundException('Статья не найдена');
+        }
+
+        return $this->render('app/page/article/show.html.twig', [
+            'article' => $article,
+        ]);
+    }
 }
